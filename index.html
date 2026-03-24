@@ -27,7 +27,8 @@ const G="#2d5a3d",GL="#e8f0eb",GM="#4a7c5f",GD="#1e3d29";
 // Replace the empty string below with your Anthropic API key.
 // Get one at: https://console.anthropic.com/settings/keys
 // Example: const API_KEY = "sk-ant-api03-...";
-const API_KEY = "";
+const API_KEY = "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";
+const USE_OPENAI = true;
 // ───────────────────────────────────────────────────────────────────────────
 
 const opcos = [
@@ -326,12 +327,12 @@ function Portal(){
     const updated=[...msgs,{role:"user",text:t}];
     setMsgs(updated);setLoading(true);
     try{
-      const r=await fetch("https://api.anthropic.com/v1/messages",{
-        method:"POST",headers:{"Content-Type":"application/json","x-api-key":API_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:KNOWLEDGE,messages:updated.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.text}))})
+      const r=await fetch("https://api.openai.com/v1/chat/completions",{
+        method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${API_KEY}`},
+        body:JSON.stringify({model:"gpt-4o-mini",max_tokens:1000,messages:[{role:"system",content:KNOWLEDGE},...updated.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.text}))]})
       });
       const d=await r.json();
-      setMsgs(p=>[...p,{role:"assistant",text:d.content?.[0]?.text||"Unable to respond. Please try again or contact support@banyansoftware.com."}]);
+      setMsgs(p=>[...p,{role:"assistant",text:d.choices?.[0]?.message?.content||"Unable to respond. Please try again or contact support@banyansoftware.com."}]);
     }catch{setMsgs(p=>[...p,{role:"assistant",text:"Connection error. Please try again or contact support@banyansoftware.com."}]);}
     setLoading(false);
   };
