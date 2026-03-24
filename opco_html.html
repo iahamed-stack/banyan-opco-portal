@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Banyan Software — OpCo Resource Portal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Inter',sans-serif;background:#f8f8f6;font-size:14px}
+  input,select,button{font-family:inherit}
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:#f0f0f0}
+  ::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+
+const G="#2d5a3d",GL="#e8f0eb",GM="#4a7c5f",GD="#1e3d29";
+
+// ── IMPORTANT ──────────────────────────────────────────────────────────────
+// Replace the empty string below with your Anthropic API key.
+// Get one at: https://console.anthropic.com/settings/keys
+// Example: const API_KEY = "sk-ant-api03-...";
+const API_KEY = "";
+// ───────────────────────────────────────────────────────────────────────────
+
+const opcos = [
+  {id:1,name:"Medicat",vertical:"Healthcare",region:"USA",model:"SaaS",domain:"medicat.com"},
+  {id:2,name:"Lightspeed Data Solutions",vertical:"Financial Services",region:"USA",model:"SaaS",domain:"lightspeeddatasolutions.com"},
+  {id:3,name:"vCreative",vertical:"Media",region:"USA",model:"Cloud",domain:"vcreativeinc.com"},
+  {id:4,name:"School Pathways",vertical:"EdTech",region:"USA",model:"On-Premise",domain:"schoolpathways.com"},
+  {id:5,name:"Counterpoint",vertical:"Media",region:"USA",model:"Mixed",domain:"counterpoint.net"},
+  {id:6,name:"Teneo",vertical:"Financial Services",region:"USA",model:"On-Premise",domain:"teneosoftware.com"},
+  {id:7,name:"Trans Plus",vertical:"Transportation",region:"CAN",model:"SaaS",domain:"transpluscorp.com"},
+  {id:8,name:"RinkNet",vertical:"Sports",region:"CAN",model:"Cloud",domain:"rinknet.com"},
+  {id:9,name:"Dominion",vertical:"Financial Services",region:"USA",model:"Cloud",domain:"dominionls.com"},
+  {id:10,name:"HWA International",vertical:"Financial Services",region:"USA",model:"On-Premise",domain:"hwainternational.com"},
+  {id:11,name:"Next Chapter (NCT)",vertical:"Government",region:"USA",model:"SaaS",domain:"nextchaptertechnology.com"},
+  {id:12,name:"Millennium",vertical:"EdTech",region:"CAN",model:"SaaS",domain:"mcsl.com"},
+  {id:13,name:"Atamis",vertical:"Government",region:"UK/EU",model:"On-Premise",domain:"atamis.co.uk"},
+  {id:14,name:"Decimal",vertical:"Government",region:"CAN",model:"Cloud",domain:"decimal.ca"},
+  {id:16,name:"DataDesign",vertical:"EdTech",region:"USA",model:"On-Premise",domain:"datadesign.io"},
+  {id:17,name:"Mr. Master",vertical:"Media",region:"USA",model:"Cloud",domain:"mrmaster.com"},
+  {id:18,name:"Argus Tracking",vertical:"Transportation",region:"ANZ",model:"SaaS",domain:"argustracking.co.nz"},
+  {id:19,name:"Camis",vertical:"Government",region:"CAN",model:"Cloud",domain:"camis.com"},
+  {id:20,name:"Loan Vision",vertical:"Financial Services",region:"USA",model:"Cloud",domain:"loan-vision.com"},
+  {id:21,name:"Aequitas",vertical:"EdTech",region:"USA",model:"On-Premise",domain:"myaequitas.com"},
+  {id:22,name:"PrintIQ",vertical:"MIU",region:"USA",model:"Cloud",domain:"printiq.com"},
+  {id:23,name:"FYB",vertical:"ANZ",region:"ANZ",model:"On-Premise",domain:"fyb.com.au"},
+  {id:24,name:"Innovatum",vertical:"MIU",region:"USA",model:"Cloud",domain:"innovatum.com"},
+  {id:25,name:"Clockwork IT",vertical:"UK/EU",region:"UK/EU",model:"SaaS",domain:"clockworkit.co.uk"},
+  {id:26,name:"SoftSmiths",vertical:"MIU",region:"USA",model:"Cloud",domain:"softsmiths.com"},
+  {id:27,name:"Element34",vertical:"Media",region:"DACH",model:"On-Premise",domain:"element34.com"},
+  {id:28,name:"BeQuick",vertical:"Media",region:"USA",model:"Cloud",domain:"bequick.com"},
+  {id:29,name:"Alpine",vertical:"Government",region:"USA",model:"SaaS",domain:"alpinesoftware.com"},
+  {id:30,name:"Linxio",vertical:"Transportation",region:"ANZ",model:"Cloud",domain:"linxio.com"},
+  {id:31,name:"H&W Computer Systems",vertical:"Financial Services",region:"USA",model:"On-Premise",domain:"hwcs.com"},
+  {id:32,name:"RubyLaw",vertical:"Media",region:"USA",model:"Cloud",domain:"rubylaw.com"},
+  {id:33,name:"CoreCampus",vertical:"EdTech",region:"USA",model:"SaaS",domain:"campuscafesoftware.com"},
+  {id:34,name:"Ubiquia",vertical:"Transportation",region:"USA",model:"SaaS",domain:"ubiquia.com"},
+  {id:35,name:"Immo",vertical:"DACH",region:"DACH",model:"On-Premise",domain:"immo-office.net"},
+  {id:36,name:"TrackMy",vertical:"Healthcare",region:"USA",model:"SaaS",domain:"trackmysolutions.us"},
+  {id:37,name:"Levl Telematics",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"levltelematics.com"},
+  {id:38,name:"ICONI",vertical:"UK/EU",region:"UK/EU",model:"SaaS",domain:"iconi.co.uk"},
+  {id:39,name:"Mobile Identify",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"mobileid.ie"},
+  {id:40,name:"GoalLine / BoostCX",vertical:"Transportation",region:"CAN",model:"Cloud",domain:"goallinesolutions.com"},
+  {id:41,name:"Intelligenz",vertical:"Government",region:"CAN",model:"SaaS",domain:"intelligenz.global"},
+  {id:42,name:"FX Cubic",vertical:"Financial Services",region:"UK/EU",model:"SaaS",domain:"fxcubic.com"},
+  {id:43,name:"The Lake Companies",vertical:"MIU",region:"USA",model:"SaaS",domain:"lakeco.com"},
+  {id:44,name:"Vivid Reports",vertical:"Media",region:"CAN",model:"On-Premise",domain:"vividreports.com"},
+  {id:45,name:"FutureNet",vertical:"ANZ",region:"ANZ",model:"Cloud",domain:"futurenet.com.au"},
+  {id:46,name:"Comtronic (DebtMaster)",vertical:"Financial Services",region:"USA",model:"Cloud",domain:"debtmaster.com"},
+  {id:48,name:"ResolutionMD",vertical:"Healthcare",region:"CAN",model:"On-Premise",domain:"calgaryscientific.com"},
+  {id:49,name:"VersaBadge",vertical:"Healthcare",region:"USA",model:"SaaS",domain:"versabadge.com"},
+  {id:50,name:"SubItUp",vertical:"EdTech",region:"USA",model:"SaaS",domain:"subitup.com"},
+  {id:51,name:"Software Answers",vertical:"MIU",region:"USA",model:"On-Premise",domain:"softwareanswers.com"},
+  {id:52,name:"Tecksoft",vertical:"Healthcare",region:"CAN",model:"Cloud",domain:"tecksoft.com"},
+  {id:53,name:"Mall Maverick",vertical:"MIU",region:"CAN",model:"SaaS",domain:"mallmaverick.com"},
+  {id:54,name:"Snappic",vertical:"Transportation",region:"CAN",model:"SaaS",domain:"snappic.com"},
+  {id:55,name:"Softera Oy",vertical:"UK/EU",region:"UK/EU",model:"On-Premise",domain:"softera.fi"},
+  {id:57,name:"Health-e Workforce",vertical:"Healthcare",region:"ANZ",model:"SaaS",domain:"healthewfs.com.au"},
+  {id:58,name:"WorldSmart",vertical:"ANZ",region:"ANZ",model:"SaaS",domain:"worldsmart.com.au"},
+  {id:59,name:"Automated Systems (ASI)",vertical:"Financial Services",region:"USA",model:"On-Premise",domain:"asiweb.com"},
+  {id:60,name:"SmartDocuments",vertical:"DACH",region:"DACH",model:"SaaS",domain:"smartdocuments.com"},
+  {id:61,name:"DualEnroll",vertical:"EdTech",region:"USA",model:"SaaS",domain:"dualenroll.com"},
+  {id:62,name:"ShapeShifter",vertical:"MIU",region:"ANZ",model:"SaaS",domain:"shapeshifter.com"},
+  {id:63,name:"Fedelta",vertical:"ANZ",region:"ANZ",model:"Cloud",domain:"fedeltapos.com"},
+  {id:64,name:"Gemini Shale",vertical:"MIU",region:"USA",model:"Cloud",domain:"geminishale.com"},
+  {id:65,name:"DRT Performance Tix",vertical:"Transportation",region:"USA",model:"SaaS",domain:"drttix.com"},
+  {id:66,name:"youRhere",vertical:"MIU",region:"CAN",model:"SaaS",domain:"yourhere.ca"},
+  {id:67,name:"NetComm",vertical:"Government",region:"USA",model:"Cloud",domain:"netcomm.net"},
+  {id:69,name:"FoxInsights",vertical:"DACH",region:"DACH",model:"SaaS",domain:"foxinsights.ai"},
+  {id:70,name:"Hancock Software",vertical:"MIU",region:"USA",model:"Cloud",domain:"hancocksoftware.com"},
+  {id:71,name:"MedTech Global",vertical:"Healthcare",region:"ANZ",model:"Cloud",domain:"medtechglobal.com"},
+  {id:72,name:"Mosaic Learning",vertical:"EdTech",region:"USA",model:"Cloud",domain:"mosaiclearning.com"},
+  {id:74,name:"Intuitive",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"intuitivesystems.com"},
+  {id:75,name:"TouchStream",vertical:"UK/EU",region:"ANZ",model:"SaaS",domain:"touchstream.media"},
+  {id:76,name:"Zap Solutions",vertical:"EdTech",region:"USA",model:"SaaS",domain:"zapsolutions.com"},
+  {id:77,name:"HR4",vertical:"Transportation",region:"CAN",model:"SaaS",domain:"hr4.com"},
+  {id:79,name:"Agile Fleet",vertical:"Transportation",region:"USA",model:"Cloud",domain:"agilefleet.com"},
+  {id:80,name:"Flexi-Dent",vertical:"UK/EU",region:"UK/EU",model:"SaaS",domain:"flexi-dent.com"},
+  {id:81,name:"Berkeley Myles",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"progress-plus.co.uk"},
+  {id:82,name:"Star Trac",vertical:"DACH",region:"DACH",model:"SaaS",domain:"star-trac.com"},
+  {id:83,name:"MPN / Eclipse EHR",vertical:"Healthcare",region:"USA",model:"Cloud",domain:"eclipsepracticemanagement.com"},
+  {id:84,name:"WebOps",vertical:"Healthcare",region:"USA",model:"SaaS",domain:"webops.com"},
+  {id:85,name:"CFS Solutions",vertical:"Financial Services",region:"USA",model:"Cloud",domain:"cfssolutions.com"},
+  {id:86,name:"Presspage",vertical:"UK/EU",region:"UK/EU",model:"SaaS",domain:"presspage.com"},
+  {id:87,name:"Hubsoft",vertical:"Brazil",region:"Brazil",model:"Cloud",domain:"hubsoft.io"},
+  {id:88,name:"i4pro",vertical:"Brazil",region:"Brazil",model:"Cloud",domain:"i4pro.com.br"},
+  {id:89,name:"Tapaas",vertical:"Financial Services",region:"ANZ",model:"SaaS",domain:"tapaas.com"},
+  {id:90,name:"Teamup Solutions",vertical:"DACH",region:"DACH",model:"SaaS",domain:"teamup.com"},
+  {id:91,name:"TEC Mailing Solutions",vertical:"Transportation",region:"USA",model:"SaaS",domain:"tecmailing.com"},
+  {id:92,name:"Nexum Software",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"nexumsoftware.com"},
+  {id:93,name:"Host Hotel Systems",vertical:"UK/EU",region:"UK/EU",model:"SaaS",domain:"hostpms.com"},
+  {id:94,name:"Point and Click",vertical:"Healthcare",region:"USA",model:"Cloud",domain:"pointandclicksolutions.com"},
+  {id:95,name:"Classter",vertical:"EdTech",region:"UK/EU",model:"SaaS",domain:"classter.com"},
+  {id:97,name:"Octopus ITSM",vertical:"Government",region:"CAN",model:"Cloud",domain:"octopus-itsm.com"},
+  {id:98,name:"Catch-e",vertical:"Transportation",region:"ANZ",model:"SaaS",domain:"catch-e.com.au"},
+  {id:99,name:"Basil",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"basil.net"},
+  {id:100,name:"Anago",vertical:"Government",region:"UK/EU",model:"Cloud",domain:"anago.nl"},
+  {id:101,name:"OR Trax",vertical:"Healthcare",region:"USA",model:"Cloud",domain:"ortrax.com"},
+  {id:102,name:"Harrier",vertical:"ANZ",region:"ANZ",model:"Cloud",domain:"harrier.com.au"},
+  {id:103,name:"Risk360",vertical:"MIU",region:"USA",model:"Cloud",domain:"powwr.com"},
+  {id:104,name:"Northwoods Consulting",vertical:"Government",region:"USA",model:"SaaS",domain:"teamnorthwoods.com"},
+  {id:105,name:"Indee TV",vertical:"Media",region:"USA",model:"SaaS",domain:"indee.tv"},
+  {id:106,name:"GaP Solutions",vertical:"ANZ",region:"ANZ",model:"Cloud",domain:"gapsolutions.com.au"},
+  {id:107,name:"Presight Solutions",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"presight.com"},
+  {id:108,name:"Gini GmbH",vertical:"Financial Services",region:"DACH",model:"SaaS",domain:"gini.net"},
+  {id:109,name:"WM Vision",vertical:"Media",region:"USA",model:"Cloud",domain:"wmvision.com"},
+  {id:110,name:"Launch Labs",vertical:"Transportation",region:"USA",model:"SaaS",domain:"launchlabs.ai"},
+  {id:111,name:"Synergist Express",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"synergist.co.uk"},
+  {id:112,name:"Agency Works",vertical:"UK/EU",region:"UK/EU",model:"Cloud",domain:"agencyworks.com"},
+];
+
+const REGIONS=["All Regions","USA","CAN","ANZ","UK/EU","DACH","Brazil"];
+const VERTICALS=["All Verticals","Healthcare","EdTech","Financial Services","Government","Transportation","MIU","Media","ANZ","DACH","UK/EU","Brazil","Sports"];
+const MODELS=["All","SaaS","Cloud","On-Premise","Mixed"];
+
+const vColors={"Healthcare":"#b91c1c","EdTech":"#1d4ed8","Financial Services":"#7c3aed","Government":"#0f766e","Transportation":"#b45309","MIU":"#6b7280","Media":"#be185d","ANZ":"#0369a1","DACH":"#4d7c0f","UK/EU":"#1e40af","Brazil":"#15803d","Sports":"#92400e"};
+
+const sections={
+  onboarding:{label:"New OpCo Checklist",icon:"✅",accent:"#1a7a4a",bg:"#e6f5ee",desc:"Step-by-step guide for operating companies joining the Banyan portfolio.",contact:"support@banyansoftware.com",
+    steps:[
+      {n:"1",title:"Set Up Security Scanning",desc:"Get onboarded to Coalition Control for external security scanning of your domains and IPs. Contact security@banyansoftware.com to initiate.",badge:"Required"},
+      {n:"2",title:"Complete Source Code Escrow",desc:"Enrol with Praxis Escrow Technologies — Banyan's preferred post-close escrow provider. DocuSign is sent post-close. Ensure your authorised person signs promptly.",badge:"Required"},
+      {n:"3",title:"Access Okta SSO",desc:"All Banyan tools are accessible via Okta SSO. Contact support@banyansoftware.com to set up access.",badge:"Required"},
+      {n:"4",title:"Install SentinelOne EDR",desc:"Deploy SentinelOne endpoint detection and response across company devices. Contact security@banyansoftware.com for your deployment package.",badge:"Required"},
+      {n:"5",title:"Configure VPN Access",desc:"Set up NordLayer VPN for your team. Contact support@banyansoftware.com for OpCo VPN configuration."},
+      {n:"6",title:"Cloud FinOps Engagement",desc:"Engage the Cloud FinOps team to review AWS and Azure spend, identify savings, and join the Banyan cloud billing organisation. Contact support@banyansoftware.com."},
+      {n:"7",title:"Review & Adopt Core Policies",desc:"Review the Acceptable Use Policy, Contractor Access Policy, and Generative AI Tools Policy. Roll out to your team within 90 days of close."},
+      {n:"8",title:"Join the Security Guild",desc:"Enrol your security contact in the Security Guild for threat intelligence and compliance guidance across the portfolio."},
+      {n:"9",title:"Join the AI Guild",desc:"Enrol technical leads in the AI Guild (#banyan-guild-ai) — the most active community channel in the portfolio. Contact support@banyansoftware.com."},
+      {n:"10",title:"Register for AI Workshop",desc:"Sign up at portal.ai.banyansoftware.net. Leaders set up a Tech Leader under My Teams to enrol their teams.",badge:"Active now"},
+    ]
+  },
+  security:{label:"Security",icon:"🛡️",accent:"#993C1D",bg:"#FAECE7",desc:"Security scanning, compliance policies, cybersecurity insurance guidance, and endpoint tooling.",contact:"security@banyansoftware.com",
+    groups:[
+      {title:"Scanning & Insurance",items:[
+        {title:"External Security Scanning",desc:"Coalition Control provides black-box external scanning of OpCo domains and IPs — non-invasive, simulates real attacker methods.",url:"#soon"},
+        {title:"Cybersecurity Insurance Guide",desc:"Coverage options, requirements, and how to obtain cybersecurity insurance.",url:"#soon"},
+        {title:"Contingent Vulnerabilities Policy",desc:"Contingent findings must be remediated within 90 days post-close or insurance may be cancelled.",url:"https://docs.google.com/document/d/1g_LoiGb8Lp2zGXl6Ead-FnXxmM8TNV6-objm1Ag60Bk/edit"},
+        {title:"Security Support",desc:"Submit all security inquiries to securitysupport@coalitioninc.com. Banyan email addresses receive priority queue status.",url:"mailto:securitysupport@coalitioninc.com"},
+      ]},
+      {title:"Compliance & Access",items:[
+        {title:"Acceptable Use Policy",desc:"Guidelines for appropriate use of Banyan IT resources.",url:"https://docs.google.com/document/d/1-5JR2cgZU1w6UQbS5dTi2NGHJTKBl4rf_i912DWmWYk/edit"},
+        {title:"Contractor Access Policy",desc:"MFA mandatory, activity monitoring, quarterly access reviews, and offboarding process.",url:"https://docs.google.com/document/d/1os4TI052jrSM5g2z4Txs2cYpTs3qrPGLEpOcr0RAOhs/edit"},
+        {title:"IT Bulletins & Alerts",desc:"IT announcements covering VPN maintenance, EDR alerts, and system updates.",url:"#soon"},
+      ]},
+    ]
+  },
+  policies:{label:"Policies",icon:"📋",accent:"#534AB7",bg:"#EEEDFE",desc:"Core policy documents and editable templates for operating companies to adopt and roll out.",contact:"support@banyansoftware.com",
+    groups:[
+      {title:"Core Policies",items:[
+        {title:"Acceptable Use Policy",desc:"Standards for IT resource usage — prohibited activities, monitoring, and enforcement.",url:"https://docs.google.com/document/d/1-5JR2cgZU1w6UQbS5dTi2NGHJTKBl4rf_i912DWmWYk/edit"},
+        {title:"Software Procurement Policy",desc:"Vendor evaluation, risk management, licensing requirements, and compliance.",url:"https://docs.google.com/document/d/1tn7SyGwf3q8mVHn3nBEyn7vAt8zbE1Ef5K3g-NyRrGs/edit"},
+        {title:"Contractor Access Policy",desc:"Least-privilege access governance for contractors and temporary workers.",url:"https://docs.google.com/document/d/1os4TI052jrSM5g2z4Txs2cYpTs3qrPGLEpOcr0RAOhs/edit"},
+        {title:"Generative AI Tools Policy",desc:"Responsible use of AI tools — data handling, acceptable use cases, prohibited activities.",url:"#soon"},
+        {title:"Meeting Etiquette & Calendar Hygiene",desc:"Standards for meeting invitations, punctuality, and client-facing professionalism.",url:"https://docs.google.com/document/d/1Iegi3rnwGR4xFhxagWQhAcyoCWsOufyqjeq55FvNax8/edit"},
+      ]},
+      {title:"Policy Templates",items:[
+        {title:"Incident Response Policy Template",desc:"Editable template to define incident response and escalation paths.",url:"#soon"},
+        {title:"Data Protection Policy Template",desc:"Data handling, retention, and protection practices.",url:"#soon"},
+        {title:"Remote Access Policy Template",desc:"Secure remote access, VPN requirements, and MFA enforcement.",url:"#soon"},
+        {title:"Change Management Policy Template",desc:"IT environment changes — approval, tracking, testing, and deployment.",url:"#soon"},
+      ]},
+    ]
+  },
+  vendors:{label:"Vendors & Discounts",icon:"💼",accent:"#3B6D11",bg:"#EAF3DE",desc:"Negotiated portfolio discounts and pre-vetted service providers available to all operating companies.",contact:"marketplace@banyansoftware.com",
+    groups:[
+      {title:"Confirmed Portfolio Discounts",items:[
+        {title:"AWS / Azure — Cloud Infrastructure Credits",desc:"Startup credits and volume discounts available to Banyan operating companies. Contact support@banyansoftware.com to access.",url:"#soon",badge:"Active"},
+        {title:"Coalition — Security Tooling Marketplace",desc:"Discounts on cybersecurity tooling via the Coalition Control portal marketplace.",url:"#soon",badge:"Active"},
+      ]},
+      {title:"Pre-Vetted Providers",items:[
+        {title:"Praxis Escrow Technologies",desc:"Preferred post-close source code escrow provider used across the Banyan portfolio.",url:"#soon"},
+        {title:"SimForm — Offshore Development",desc:"Used by several operating companies. Recommend speaking with peer OpCos before engaging.",url:"#soon"},
+        {title:"SentinelOne — Endpoint Security",desc:"EDR tool used across the Banyan portfolio. Contact security@banyansoftware.com.",url:"#soon"},
+        {title:"NordLayer — VPN",desc:"Banyan's VPN provider. Contact support@banyansoftware.com to set up access.",url:"#soon"},
+      ]},
+      {title:"Contribute",items:[
+        {title:"Submit a Discount or Vendor",desc:"Know a discount or vendor that should be listed? Email marketplace@banyansoftware.com.",url:"mailto:marketplace@banyansoftware.com"},
+        {title:"Rate a Vendor",desc:"Share feedback to help other operating companies make informed decisions.",url:"mailto:marketplace@banyansoftware.com"},
+      ]},
+    ]
+  },
+  aitech:{label:"AI & Technology",icon:"⚡",accent:"#185FA5",bg:"#E6F1FB",desc:"AI tools, learning resources, coding curriculum, and technology guidance for operating company technical teams.",contact:"support@banyansoftware.com",
+    groups:[
+      {title:"AI Tools & Access",items:[
+        {title:"Banyan AI Workshop Portal",desc:"Register at portal.ai.banyansoftware.net. Leaders configure a Tech Leader under My Teams to enrol teams.",url:"https://portal.ai.banyansoftware.net",badge:"Live"},
+        {title:"Zeus — Internal AI Document Q&A",desc:"Banyan's internal AI — Google Drive integrated Q&A, TDD report generation, security scanning.",url:"https://docs.google.com/document/d/1E6UlvF86W6iza2kr6EaIGT4hY0MRwmlCGtj5-MVBf0o/edit"},
+        {title:"Okta SSO — Tool Access",desc:"All Banyan tools accessible via Okta SSO. Contact support@banyansoftware.com.",url:"http://banyansoftware.okta.com/"},
+        {title:"Claude.ai for Teams",desc:"Used across the portfolio for documentation, code review, and AI-assisted workflows.",url:"https://claude.ai"},
+      ]},
+      {title:"Learning & Curriculum",items:[
+        {title:"AI Coding Curriculum",desc:"AI coding training for operating companies — agentic coding, Claude, GitHub Copilot.",url:"https://docs.google.com/presentation/d/1Eevr6Nn0kd234bct1Y5h2tAprtC2flkCDvTPeJ-0h14/edit"},
+        {title:"Technical Group Onboarding",desc:"Standard onboarding materials for companies joining the Banyan Technical Group.",url:"https://docs.google.com/presentation/d/118_bcN3jcH5AcYXZU2P1rbtbgkD-fAYI/edit"},
+        {title:"AI Showcase Recording — March 2026",desc:"Portfolio showcase: AI-powered PO workflow automation and agentic SDLC automation.",url:"https://drive.google.com/file/d/1csQ1nF7BL5QeSKKCyOcJMP8o8nl6MI3c/view"},
+        {title:"AI Security Guardrails Guide",desc:"Protecting AI agents from prompt injection — system prompt templates and CLAUDE.md guidance.",url:"#soon"},
+      ]},
+      {title:"Portfolio Use Cases",items:[
+        {title:"Zendesk → Azure DevOps Automation",desc:"AI connecting Zendesk to Azure DevOps for automated bug logging and triage.",url:"#soon"},
+        {title:"RFP Response Automation",desc:"Product capability matrix from historical RFP data — gap analysis in minutes.",url:"#soon"},
+        {title:"Roadmap & Burndown Management",desc:"Claude + Azure DevOps integration — burndowns, blockers, Gantt charts.",url:"#soon"},
+        {title:"AI-Assisted QA & Test Case Generation",desc:"Demo video → codebase triangulation → automated user story generation.",url:"#soon"},
+      ]},
+    ]
+  },
+  guilds:{label:"Guilds",icon:"🤝",accent:"#854F0B",bg:"#FAEEDA",desc:"Specialised communities connecting Banyan operating companies around shared domains and professional practice.",contact:"support@banyansoftware.com",
+    groups:[
+      {title:"Active Guilds",items:[
+        {title:"AI Guild — #banyan-guild-ai",desc:"AI adoption, use case sharing, tooling evaluation, and practical implementation. Most active community channel in Banyan.",url:"#soon",badge:"Most active"},
+        {title:"Product Guild",desc:"Technology, engineering, and product strategy for B2B software teams.",url:"#soon"},
+        {title:"Security Guild",desc:"Cybersecurity practices, threat intelligence, incident response, and compliance.",url:"#soon"},
+        {title:"CEO Guild",desc:"Leadership community for operating company CEOs.",url:"#soon"},
+        {title:"Sales & Marketing Guild",desc:"Share learnings, discuss trends, and grow your business.",url:"#soon"},
+        {title:"Client Success Guild",desc:"Retention, expansion, onboarding, and service delivery best practices.",url:"#soon"},
+      ]},
+      {title:"How to Join",items:[
+        {title:"Join a Guild",desc:"Email support@banyansoftware.com. Operating company leaders can register their entire teams.",url:"mailto:support@banyansoftware.com"},
+      ]},
+    ]
+  },
+  advisory:{label:"Tech Advisory",icon:"🔭",accent:"#0F6E56",bg:"#E1F5EE",desc:"Technology advisory resources, roadmap planning materials, and guidance for operating company leadership teams.",contact:"support@banyansoftware.com",
+    groups:[
+      {title:"Advisory Contacts",items:[
+        {title:"Technical Operating Partner",desc:"Technology strategy, technical due diligence, and operating company technical health.",url:"#soon"},
+        {title:"Security Director",desc:"Security oversight, external scanning, cybersecurity insurance, and compliance frameworks.",url:"#soon"},
+        {title:"Head of IT",desc:"IT infrastructure, vendor framework, SharePoint migration, system access. Contact support@banyansoftware.com.",url:"#soon"},
+        {title:"Head of Corporate IT",desc:"IT bulletins, system access, VPN setup, and Okta SSO. Contact support@banyansoftware.com.",url:"#soon"},
+      ]},
+      {title:"Resources & Templates",items:[
+        {title:"Ecosystem Synergy Template",desc:"Template for mapping and activating synergies across Banyan operating companies.",url:"#soon"},
+        {title:"Roadmap Planning Workshop",desc:"Strategic roadmap planning materials for operating company leadership teams.",url:"https://docs.google.com/presentation/d/1j77OAsVk28ppSVzplV7xOwL4FSPeWGO8/edit"},
+        {title:"Technical Advisor Directory",desc:"Directory of Banyan technical advisors, security leads, and operating partners.",url:"#soon"},
+        {title:"How to Request Advisory Support",desc:"Process for engaging technical advisory services for your operating company.",url:"#soon"},
+      ]},
+    ]
+  },
+  workshops:{label:"Workshops",icon:"🎓",accent:"#5F5E5A",bg:"#F1EFE8",desc:"Workshop recordings, reference materials, and registration links for Banyan learning and enablement programs.",contact:"support@banyansoftware.com",
+    groups:[
+      {title:"Available Now",items:[
+        {title:"AI Agentic Coding Workshop",desc:"Live cohort-based workshop. Register at portal.ai.banyansoftware.net. Multiple session dates available.",url:"https://portal.ai.banyansoftware.net",badge:"Enrolling now"},
+        {title:"AI Showcase — March 2026 Recording",desc:"AI-powered PO workflow automation (Jira) and agentic SDLC automation.",url:"https://drive.google.com/file/d/1csQ1nF7BL5QeSKKCyOcJMP8o8nl6MI3c/view"},
+        {title:"Roadmap Planning Workshop",desc:"Strategic roadmap planning workshop materials for operating company leadership teams.",url:"https://docs.google.com/presentation/d/1j77OAsVk28ppSVzplV7xOwL4FSPeWGO8/edit"},
+        {title:"AI Tools Training Session Recording",desc:"AI tool capabilities, prompt engineering, custom configurations, and research workflows.",url:"#soon"},
+      ]},
+      {title:"Coming Soon",items:[
+        {title:"AI for Technical Documentation",desc:"Using generative AI to create and maintain technical documentation.",url:"#soon"},
+        {title:"Suggest a Workshop",desc:"Have a topic in mind? Email support@banyansoftware.com.",url:"mailto:support@banyansoftware.com"},
+      ]},
+    ]
+  },
+};
+
+const KNOWLEDGE=`You are the Banyan Software OpCo Resource Assistant — professional, concise, and helpful for operating company staff.
+
+ABOUT BANYAN: Acquires, grows, and holds enterprise software businesses globally. 110+ operating companies across Healthcare, EdTech, Financial Services, Government, Transportation, MIU, Media — in USA, Canada, ANZ, UK/EU, DACH, Brazil.
+
+NEW OPCO CHECKLIST (in order): 1) Coalition Control security scanning 2) Praxis source code escrow enrollment 3) Okta SSO access 4) SentinelOne EDR deployment 5) NordLayer VPN setup 6) Cloud FinOps engagement 7) Review & adopt core policies within 90 days 8) Join Security Guild 9) Join AI Guild 10) Register for AI Agentic Coding Workshop.
+
+DISCOUNTS: (1) AWS/Azure cloud infrastructure credits (2) Coalition security tooling via Coalition Control marketplace.
+
+SECURITY: Contingent vulnerabilities must be remediated within 90 days post-close or cybersecurity insurance may be cancelled. Security: securitysupport@coalitioninc.com.
+
+VENDORS: Praxis Escrow (post-close escrow), SentinelOne (EDR), NordLayer (VPN), SimForm (offshore dev — verify with peers first).
+
+AI TOOLS: Zeus (internal AI, Google Drive Q&A), Claude.ai, GitHub Copilot, portal.ai.banyansoftware.net.
+
+CLOUD FINOPS: Reviews AWS and Azure spend, identifies savings, manages Banyan cloud billing org enrollment. Contact support@banyansoftware.com.
+
+ESCROW: Praxis Escrow Technologies is the preferred provider. DocuSign sent post-close.
+
+GUILDS: AI Guild (#banyan-guild-ai — most active), Product, Security, CEO, Sales & Marketing, Client Success. Join via support@banyansoftware.com.
+
+CONTACTS: General/IT: support@banyansoftware.com | Security: security@banyansoftware.com | Vendors: marketplace@banyansoftware.com | Security scanning: securitysupport@coalitioninc.com
+
+Never mention individual staff names. Always refer to email contacts. Be professional and concise.`;
+
+const SUGGESTIONS=["What should a new OpCo do first?","What discounts are available?","How do I set up security scanning?","How do I join the AI Guild?","What is the escrow process?","What AI tools are available?","How do I engage the Cloud FinOps team?","What OpCos are in Australia?"];
+
+function Portal(){
+  const [page,setPage]=React.useState("home");
+  const [msgs,setMsgs]=React.useState([{role:"assistant",text:"Hello. I'm the Banyan OpCo Resource Assistant. I can help you find tools, policies, discounts, vendor information, workshops, guild resources, and navigate the new OpCo checklist. What are you looking for?"}]);
+  const [inp,setInp]=React.useState("");
+  const [loading,setLoading]=React.useState(false);
+  const [search,setSearch]=React.useState("");
+  const [fRegion,setFRegion]=React.useState("All Regions");
+  const [fVertical,setFVertical]=React.useState("All Verticals");
+  const [fModel,setFModel]=React.useState("All");
+  const [checked,setChecked]=React.useState({});
+  const [aiError,setAiError]=React.useState(false);
+  const chatRef=React.useRef();
+
+  React.useEffect(()=>{if(chatRef.current)chatRef.current.scrollTop=chatRef.current.scrollHeight;},[msgs]);
+
+  const send=async(msg)=>{
+    const t=(msg||inp).trim();if(!t)return;
+    if(!API_KEY){setAiError(true);return;}
+    setInp("");setAiError(false);
+    const updated=[...msgs,{role:"user",text:t}];
+    setMsgs(updated);setLoading(true);
+    try{
+      const r=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",headers:{"Content-Type":"application/json","x-api-key":API_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,system:KNOWLEDGE,messages:updated.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.text}))})
+      });
+      const d=await r.json();
+      setMsgs(p=>[...p,{role:"assistant",text:d.content?.[0]?.text||"Unable to respond. Please try again or contact support@banyansoftware.com."}]);
+    }catch{setMsgs(p=>[...p,{role:"assistant",text:"Connection error. Please try again or contact support@banyansoftware.com."}]);}
+    setLoading(false);
+  };
+
+  const filtered=opcos.filter(o=>{
+    const q=search.toLowerCase();
+    return(!q||o.name.toLowerCase().includes(q)||o.vertical.toLowerCase().includes(q)||o.domain.toLowerCase().includes(q))
+      &&(fRegion==="All Regions"||o.region===fRegion)
+      &&(fVertical==="All Verticals"||o.vertical===fVertical)
+      &&(fModel==="All"||o.model===fModel);
+  });
+
+  const sKey=!["home","ask","directory","onboarding"].includes(page)?page:null;
+  const sec=sKey?sections[sKey]:null;
+
+  const nav=[["home","Home"],["onboarding","✅ New OpCo"],["directory","🗂 Directory"],["security","Security"],["policies","Policies"],["vendors","Vendors"],["aitech","AI & Tech"],["guilds","Guilds"],["advisory","Advisory"],["workshops","Workshops"],["ask","Ask AI ✦"]];
+
+  const s=(f,styles)=>({...f,...styles});
+  const hov=(el,on,off)=>{el.onmouseenter=()=>Object.assign(el.style,on);el.onmouseleave=()=>Object.assign(el.style,off);};
+
+  const DocCard=({item,accent})=>(
+    <a href={item.url!=="#soon"?item.url:undefined} target="_blank" rel="noopener noreferrer" style={{textDecoration:"none",display:"block",marginBottom:6}}>
+      <div style={{display:"flex",gap:12,padding:"11px 14px",borderRadius:6,border:`1px solid ${item.url!=="#soon"?"#e2e2e2":"#eee"}`,background:"#fff",cursor:item.url!=="#soon"?"pointer":"default",transition:"all 0.15s"}}
+        onMouseEnter={e=>{if(item.url!=="#soon"){e.currentTarget.style.borderColor=accent||G;e.currentTarget.style.background="#fafafa";e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.06)";}}}
+        onMouseLeave={e=>{e.currentTarget.style.borderColor=item.url!=="#soon"?"#e2e2e2":"#eee";e.currentTarget.style.background="#fff";e.currentTarget.style.boxShadow="none";}}>
+        <div style={{color:item.url!=="#soon"?(accent||G):"#ccc",fontSize:12,flexShrink:0,marginTop:3}}>{item.url==="#soon"?"○":"●"}</div>
+        <div style={{flex:1}}>
+          <div style={{fontSize:13,fontWeight:600,color:item.url!=="#soon"?"#1a1a1a":"#aaa",marginBottom:3,display:"flex",alignItems:"center",gap:8,flexWrap:"wrap"}}>
+            {item.title}
+            {item.badge&&<span style={{fontSize:10,background:item.badge==="Active"?"#e8f5e9":item.badge==="Live"?"#e3f2fd":"#fff3e0",color:item.badge==="Active"?"#2e7d32":item.badge==="Live"?"#1565c0":"#e65100",padding:"2px 7px",borderRadius:3,fontWeight:600}}>{item.badge}</span>}
+            {item.url==="#soon"&&<span style={{fontSize:10,background:"#f5f5f5",color:"#bbb",padding:"2px 7px",borderRadius:3}}>COMING SOON</span>}
+          </div>
+          <div style={{fontSize:12,color:"#777",lineHeight:1.6}}>{item.desc}</div>
+        </div>
+        {item.url!=="#soon"&&<div style={{color:"#ccc",fontSize:13,flexShrink:0,marginTop:3}}>↗</div>}
+      </div>
+    </a>
+  );
+
+  const Crumb=({label})=>(
+    <div style={{fontSize:12,color:"#aaa",marginBottom:16}}>
+      <span style={{cursor:"pointer",color:GM}} onClick={()=>setPage("home")}>Home</span> › {label}
+    </div>
+  );
+
+  return(
+    <div style={{fontFamily:"-apple-system,BlinkMacSystemFont,Inter,sans-serif",background:"#f8f8f6",minHeight:"100vh"}}>
+
+      {/* NAV */}
+      <div style={{background:"#fff",borderBottom:"1px solid #e8e8e8",padding:"0 20px",display:"flex",alignItems:"center",justifyContent:"space-between",height:52,position:"sticky",top:0,zIndex:50,flexWrap:"wrap",gap:4}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <div style={{display:"flex",gap:3}}>{[1,0.6,0.3].map((o,i)=><div key={i} style={{width:7,height:7,borderRadius:"50%",background:G,opacity:o}}/>)}</div>
+          <span style={{fontWeight:700,fontSize:14,color:"#1a1a1a"}}>Banyan Software</span>
+          <span style={{color:"#ddd"}}>·</span>
+          <span style={{fontSize:12,color:"#888"}}>OpCo Resource Portal</span>
+        </div>
+        <div style={{display:"flex",gap:1,flexWrap:"wrap"}}>
+          {nav.map(([k,l])=>(
+            <button key={k} onClick={()=>setPage(k)} style={{background:page===k?G:"transparent",color:page===k?"#fff":"#555",border:"none",borderRadius:5,padding:"5px 9px",fontSize:11,cursor:"pointer",fontWeight:page===k?600:400,transition:"all 0.12s"}}
+              onMouseEnter={e=>{if(page!==k)e.currentTarget.style.background="#f0f0f0";}}
+              onMouseLeave={e=>{if(page!==k)e.currentTarget.style.background="transparent";}}>
+              {l}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* HOME */}
+      {page==="home"&&(
+        <div>
+          <div style={{background:`linear-gradient(135deg,${GD} 0%,${G} 60%,${GM} 100%)`,padding:"60px 32px 52px",textAlign:"center"}}>
+            <div style={{display:"inline-block",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:20,padding:"4px 14px",fontSize:11,color:"rgba(255,255,255,0.8)",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:18}}>For Banyan Operating Companies</div>
+            <h1 style={{color:"#fff",fontSize:34,fontWeight:700,margin:"0 0 14px",letterSpacing:"-0.02em",lineHeight:1.2}}>OpCo Resource Portal</h1>
+            <p style={{color:"rgba(255,255,255,0.75)",fontSize:14,maxWidth:560,margin:"0 auto 28px",lineHeight:1.85}}>Policies, tools, vendor discounts, AI resources, and community programs — everything your team needs to operate and grow within the Banyan portfolio.</p>
+            <div style={{display:"flex",gap:10,justifyContent:"center",flexWrap:"wrap"}}>
+              {[["New OpCo Checklist →","onboarding","#fff",G],["Browse Portfolio Directory","directory","transparent","rgba(255,255,255,0.9)"],["Ask the AI →","ask","transparent","rgba(255,255,255,0.9)"]].map(([l,t,bg,col])=>(
+                <button key={t} onClick={()=>setPage(t)} style={{background:bg,color:col,border:`1px solid ${bg==="transparent"?"rgba(255,255,255,0.35)":"transparent"}`,padding:"11px 22px",borderRadius:6,fontSize:13,fontWeight:600,cursor:"pointer"}}>{l}</button>
+              ))}
+            </div>
+          </div>
+          <div style={{background:GD,padding:"14px 32px",display:"flex",justifyContent:"center",gap:48,flexWrap:"wrap"}}>
+            {[["110+","Operating Companies"],["7","Resource Sections"],["6","Active Guilds"],["2","Active Discounts"]].map(([v,l])=>(
+              <div key={l} style={{textAlign:"center"}}>
+                <div style={{fontSize:18,fontWeight:700,color:"#fff"}}>{v}</div>
+                <div style={{fontSize:10,color:"rgba(255,255,255,0.5)",letterSpacing:"0.06em",textTransform:"uppercase"}}>{l}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{maxWidth:960,margin:"28px auto 0",padding:"0 24px",display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
+            {[{icon:"✅",label:"New to Banyan?",desc:"Follow the 10-step onboarding checklist to get your OpCo set up correctly from day one.",btn:"Open Checklist",t:"onboarding",c:"#1a7a4a"},{icon:"🗂",label:"Portfolio Directory",desc:`Browse all ${opcos.length} operating companies — filter by region, vertical, and deployment model.`,btn:"Browse Directory",t:"directory",c:"#185FA5"},{icon:"⚡",label:"AI & Technology",desc:"Access AI tools, workshops, use cases, and the Banyan AI Workshop Portal.",btn:"Explore AI",t:"aitech",c:"#185FA5"}].map(c=>(
+              <div key={c.label} onClick={()=>setPage(c.t)} style={{background:"#fff",border:"1px solid #e8e8e8",borderRadius:8,padding:"18px 16px",cursor:"pointer",borderTop:`2px solid ${c.c}`,transition:"all 0.15s"}}
+                onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 4px 16px rgba(0,0,0,0.08)";e.currentTarget.style.transform="translateY(-2px)";}}
+                onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.transform="none";}}>
+                <div style={{fontSize:22,marginBottom:10}}>{c.icon}</div>
+                <div style={{fontSize:13,fontWeight:700,color:"#1a1a1a",marginBottom:6}}>{c.label}</div>
+                <div style={{fontSize:12,color:"#888",lineHeight:1.6,marginBottom:12}}>{c.desc}</div>
+                <div style={{fontSize:11,fontWeight:600,color:c.c}}>{c.btn} →</div>
+              </div>
+            ))}
+          </div>
+          <div style={{padding:"24px",maxWidth:960,margin:"0 auto"}}>
+            <div style={{fontSize:11,fontWeight:700,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.12em",marginBottom:14}}>All Resource Sections</div>
+            <div style={{display:"grid",gridTemplateColumns:"repeat(4,minmax(0,1fr))",gap:10,marginBottom:28}}>
+              {Object.entries(sections).filter(([k])=>k!=="onboarding").map(([k,s])=>(
+                <div key={k} onClick={()=>setPage(k)} style={{background:"#fff",border:"1px solid #e8e8e8",borderRadius:8,padding:"14px",cursor:"pointer",borderTop:`2px solid ${s.accent}`,transition:"all 0.15s"}}
+                  onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 4px 12px rgba(0,0,0,0.07)";e.currentTarget.style.transform="translateY(-1px)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.transform="none";}}>
+                  <div style={{fontSize:18,marginBottom:8}}>{s.icon}</div>
+                  <div style={{fontSize:12,fontWeight:600,color:"#1a1a1a",marginBottom:4}}>{s.label}</div>
+                  <div style={{fontSize:11,fontWeight:600,color:s.accent,marginTop:8}}>EXPLORE →</div>
+                </div>
+              ))}
+            </div>
+            <div style={{background:`linear-gradient(135deg,${G},${GM})`,borderRadius:10,padding:"24px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",gap:20,flexWrap:"wrap",marginBottom:32}}>
+              <div>
+                <div style={{fontSize:15,fontWeight:600,color:"#fff",marginBottom:6}}>Resource Assistant</div>
+                <div style={{fontSize:13,color:"rgba(255,255,255,0.75)",maxWidth:460,lineHeight:1.7}}>Instant answers on discounts, tools, security, guilds, onboarding, and portfolio resources.</div>
+              </div>
+              <button onClick={()=>setPage("ask")} style={{background:"#fff",color:G,border:"none",padding:"11px 22px",borderRadius:6,fontSize:13,fontWeight:600,cursor:"pointer",whiteSpace:"nowrap"}}>Open Assistant →</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NEW OPCO CHECKLIST */}
+      {page==="onboarding"&&(
+        <div style={{maxWidth:760,margin:"0 auto",padding:"32px 24px"}}>
+          <Crumb label="New OpCo Checklist"/>
+          <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10,paddingBottom:18,borderBottom:"1px solid #e8e8e8"}}>
+            <div style={{width:50,height:50,borderRadius:10,background:"#e6f5ee",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>✅</div>
+            <div>
+              <h1 style={{fontSize:22,fontWeight:700,color:"#1a1a1a",margin:"0 0 4px"}}>New OpCo Onboarding Checklist</h1>
+              <div style={{fontSize:12,color:"#aaa"}}>Questions? <a href="mailto:support@banyansoftware.com" style={{color:GM}}>support@banyansoftware.com</a></div>
+            </div>
+          </div>
+          <p style={{fontSize:14,color:"#666",marginBottom:24,lineHeight:1.8}}>Complete the following steps to get fully set up within the Banyan portfolio. Steps should be completed in order within the first 90 days post-close.</p>
+          <div style={{display:"flex",flexDirection:"column",gap:10}}>
+            {sections.onboarding.steps.map(s=>{
+              const done=checked[s.n];
+              return(
+                <div key={s.n} style={{display:"flex",gap:14,padding:"14px 16px",borderRadius:8,border:`1px solid ${done?"#c8e6c9":"#e8e8e8"}`,background:done?"#f9fff9":"#fff",cursor:"pointer",transition:"all 0.2s"}}
+                  onClick={()=>setChecked(p=>({...p,[s.n]:!p[s.n]}))}>
+                  <div style={{width:24,height:24,borderRadius:"50%",border:`2px solid ${done?"#2e7d32":"#ccc"}`,background:done?"#2e7d32":"#fff",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:1,transition:"all 0.2s"}}>
+                    {done&&<span style={{color:"#fff",fontSize:13,fontWeight:700}}>✓</span>}
+                  </div>
+                  <div style={{flex:1}}>
+                    <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:4,flexWrap:"wrap"}}>
+                      <span style={{fontSize:11,color:"#bbb",fontWeight:600}}>STEP {s.n}</span>
+                      <span style={{fontSize:13,fontWeight:600,color:done?"#888":"#1a1a1a",textDecoration:done?"line-through":"none"}}>{s.title}</span>
+                      {s.badge&&<span style={{fontSize:10,background:"#e8f5e9",color:"#2e7d32",padding:"2px 7px",borderRadius:3,fontWeight:600}}>{s.badge}</span>}
+                    </div>
+                    <div style={{fontSize:12,color:"#777",lineHeight:1.65}}>{s.desc}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{marginTop:20,padding:"14px 16px",background:"#f8f8f6",border:"1px solid #e8e8e8",borderRadius:8,fontSize:12,color:"#888",lineHeight:1.7}}>
+            Progress is not saved between sessions. Contact <a href="mailto:support@banyansoftware.com" style={{color:GM}}>support@banyansoftware.com</a> for any onboarding questions.
+          </div>
+        </div>
+      )}
+
+      {/* DIRECTORY */}
+      {page==="directory"&&(
+        <div style={{maxWidth:1040,margin:"0 auto",padding:"32px 24px"}}>
+          <Crumb label="Portfolio Directory"/>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:20,flexWrap:"wrap",marginBottom:16,paddingBottom:18,borderBottom:"1px solid #e8e8e8"}}>
+            <div>
+              <h1 style={{fontSize:22,fontWeight:700,color:"#1a1a1a",margin:"0 0 4px"}}>Portfolio Directory</h1>
+              <div style={{fontSize:13,color:"#888"}}>{filtered.length} of {opcos.length} operating companies</div>
+            </div>
+          </div>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16,alignItems:"center"}}>
+            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search by name, vertical, or domain…"
+              style={{flex:"1 1 200px",padding:"8px 12px",border:"1px solid #ddd",borderRadius:6,fontSize:13,outline:"none",minWidth:180}}/>
+            {[[fRegion,setFRegion,REGIONS],[fVertical,setFVertical,VERTICALS],[fModel,setFModel,MODELS]].map(([v,sv,opts],i)=>(
+              <select key={i} value={v} onChange={e=>sv(e.target.value)}
+                style={{padding:"8px 10px",border:"1px solid #ddd",borderRadius:6,fontSize:12,background:"#fff",cursor:"pointer",color:"#555"}}>
+                {opts.map(o=><option key={o}>{o}</option>)}
+              </select>
+            ))}
+            {(search||fRegion!=="All Regions"||fVertical!=="All Verticals"||fModel!=="All")&&(
+              <button onClick={()=>{setSearch("");setFRegion("All Regions");setFVertical("All Verticals");setFModel("All");}}
+                style={{padding:"8px 12px",border:"1px solid #ddd",borderRadius:6,fontSize:12,background:"#fff",cursor:"pointer",color:"#888"}}>Clear</button>
+            )}
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,minmax(0,1fr))",gap:8}}>
+            {filtered.map(o=>(
+              <div key={o.id} style={{background:"#fff",border:"1px solid #e8e8e8",borderRadius:7,padding:"12px 14px",transition:"all 0.12s"}}
+                onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 2px 10px rgba(0,0,0,0.07)";e.currentTarget.style.borderColor="#d0d0d0";}}
+                onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";e.currentTarget.style.borderColor="#e8e8e8";}}>
+                <div style={{fontSize:13,fontWeight:600,color:"#1a1a1a",marginBottom:6}}>{o.name}</div>
+                <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:6}}>
+                  <span style={{fontSize:10,background:vColors[o.vertical]||"#555",color:"#fff",padding:"2px 7px",borderRadius:3,fontWeight:500}}>{o.vertical}</span>
+                  <span style={{fontSize:10,background:"#f0f0f0",color:"#555",padding:"2px 7px",borderRadius:3}}>{o.region}</span>
+                  <span style={{fontSize:10,background:"#f5f5f5",color:"#777",padding:"2px 7px",borderRadius:3}}>{o.model}</span>
+                </div>
+                <div style={{fontSize:11,color:"#bbb"}}>{o.domain}</div>
+              </div>
+            ))}
+          </div>
+          {filtered.length===0&&<div style={{textAlign:"center",padding:"48px 0",color:"#aaa",fontSize:14}}>No operating companies match your filters.</div>}
+        </div>
+      )}
+
+      {/* SECTION PAGES */}
+      {sec&&(
+        <div style={{maxWidth:920,margin:"0 auto",padding:"32px 24px"}}>
+          <Crumb label={sec.label}/>
+          <div style={{display:"flex",alignItems:"center",gap:16,marginBottom:12,paddingBottom:18,borderBottom:"1px solid #e8e8e8"}}>
+            <div style={{width:50,height:50,borderRadius:10,background:sec.bg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{sec.icon}</div>
+            <div>
+              <h1 style={{fontSize:22,fontWeight:700,color:"#1a1a1a",margin:"0 0 4px"}}>{sec.label}</h1>
+              <div style={{fontSize:12,color:"#aaa"}}>Questions? <a href={`mailto:${sec.contact}`} style={{color:GM}}>{sec.contact}</a></div>
+            </div>
+          </div>
+          <p style={{fontSize:14,color:"#666",marginBottom:26,lineHeight:1.8,maxWidth:720}}>{sec.desc}</p>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(2,minmax(0,1fr))",gap:24}}>
+            {sec.groups.map(g=>(
+              <div key={g.title}>
+                <div style={{fontSize:11,fontWeight:700,color:sec.accent,textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10,display:"flex",alignItems:"center",gap:7}}>
+                  <div style={{width:2,height:12,background:sec.accent,borderRadius:1}}/>{g.title}
+                </div>
+                {g.items.map(item=><DocCard key={item.title} item={item} accent={sec.accent}/>)}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ASK AI */}
+      {page==="ask"&&(
+        <div style={{maxWidth:780,margin:"0 auto",padding:"32px 24px"}}>
+          <Crumb label="Resource Assistant"/>
+          <h2 style={{fontSize:22,fontWeight:700,color:"#1a1a1a",margin:"0 0 4px"}}>Resource Assistant</h2>
+          <div style={{fontSize:13,color:"#888",marginBottom:20}}>Ask about tools, discounts, policies, guilds, onboarding, workshops, or security</div>
+
+          {aiError&&(
+            <div style={{background:"#fff3cd",border:"1px solid #ffc107",borderRadius:8,padding:"12px 16px",marginBottom:14,fontSize:13,color:"#856404",lineHeight:1.7}}>
+              ⚠️ API key not configured. Open <code>index.html</code> in a text editor, find the line <code>const API_KEY = "";</code> near the top, and add your Anthropic API key from <a href="https://console.anthropic.com/settings/keys" target="_blank" style={{color:"#856404"}}>console.anthropic.com</a>.
+            </div>
+          )}
+
+          <div ref={chatRef} style={{background:"#fff",border:"1px solid #e8e8e8",borderRadius:10,padding:"18px",minHeight:300,maxHeight:420,overflowY:"auto",marginBottom:10,display:"flex",flexDirection:"column",gap:14}}>
+            {msgs.map((m,i)=>(
+              <div key={i} style={{display:"flex",gap:10,justifyContent:m.role==="user"?"flex-end":"flex-start",alignItems:"flex-end"}}>
+                {m.role==="assistant"&&<div style={{width:28,height:28,borderRadius:"50%",background:GL,border:`1px solid ${G}22`,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:11,color:G,fontWeight:700}}>B</div>}
+                <div style={{maxWidth:"76%",background:m.role==="user"?G:"#f6f6f4",color:m.role==="user"?"#fff":"#222",borderRadius:m.role==="user"?"14px 14px 3px 14px":"14px 14px 14px 3px",padding:"11px 15px",fontSize:13,lineHeight:1.7,whiteSpace:"pre-wrap"}}>{m.text}</div>
+                {m.role==="user"&&<div style={{width:28,height:28,borderRadius:"50%",background:G,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:10,color:"#fff",fontWeight:700}}>You</div>}
+              </div>
+            ))}
+            {loading&&(
+              <div style={{display:"flex",gap:10,alignItems:"center"}}>
+                <div style={{width:28,height:28,borderRadius:"50%",background:GL,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:G,fontWeight:700}}>B</div>
+                <div style={{background:"#f6f6f4",borderRadius:"14px 14px 14px 3px",padding:"11px 15px",fontSize:12,color:"#aaa"}}>
+                  {["●","●","●"].map((d,i)=><span key={i} style={{animation:"pulse 1s infinite",animationDelay:`${i*0.2}s`,marginRight:3}}>{d}</span>)}
+                </div>
+              </div>
+            )}
+          </div>
+          <div style={{display:"flex",gap:8,marginBottom:14}}>
+            <input value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>e.key==="Enter"&&!loading&&send()}
+              placeholder="Ask about discounts, onboarding, tools, guilds, policies…"
+              style={{flex:1,padding:"10px 14px",border:"1px solid #ddd",borderRadius:7,fontSize:13,outline:"none"}}/>
+            <button onClick={()=>send()} disabled={loading||!inp.trim()} style={{background:G,color:"#fff",border:"none",padding:"10px 18px",borderRadius:7,fontSize:13,fontWeight:600,cursor:loading?"not-allowed":"pointer",opacity:loading||!inp.trim()?0.4:1}}>Send</button>
+          </div>
+          <div style={{background:"#f8f8f6",border:"1px solid #eaeaea",borderRadius:8,padding:"14px 16px"}}>
+            <div style={{fontSize:11,fontWeight:600,color:"#aaa",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:10}}>Suggested questions</div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+              {SUGGESTIONS.map(s=>(
+                <button key={s} onClick={()=>!loading&&send(s)} style={{background:"#fff",border:"1px solid #ddd",borderRadius:20,padding:"6px 13px",fontSize:12,color:"#555",cursor:"pointer",transition:"all 0.1s"}}
+                  onMouseEnter={e=>{e.currentTarget.style.borderColor=G;e.currentTarget.style.color=G;}}
+                  onMouseLeave={e=>{e.currentTarget.style.borderColor="#ddd";e.currentTarget.style.color="#555";}}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div style={{background:"#1a1a1a",padding:"18px 32px",textAlign:"center",marginTop:"4rem"}}>
+        <div style={{fontSize:11,color:"rgba(255,255,255,0.25)",letterSpacing:"0.04em"}}>
+          © 2026 Banyan Software · OpCo Resource Portal · Internal Use Only · <a href="mailto:marketplace@banyansoftware.com" style={{color:"rgba(255,255,255,0.25)"}}>Feedback</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<Portal/>);
+</script>
+</body>
+</html>
