@@ -27,8 +27,7 @@ const G="#2d5a3d",GL="#e8f0eb",GM="#4a7c5f",GD="#1e3d29";
 // Replace the empty string below with your Anthropic API key.
 // Get one at: https://console.anthropic.com/settings/keys
 // Example: const API_KEY = "sk-ant-api03-...";
-const API_KEY = "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";
-const USE_GROQ = true;
+const API_KEY = "";
 // ───────────────────────────────────────────────────────────────────────────
 
 const opcos = [
@@ -327,9 +326,9 @@ function Portal(){
     const updated=[...msgs,{role:"user",text:t}];
     setMsgs(updated);setLoading(true);
     try{
-      const r=await fetch("https://api.groq.com/openai/v1/chat/completions",{
-        method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${API_KEY}`},
-        body:JSON.stringify({model:"llama3-8b-8192",max_tokens:1000,messages:[{role:"system",content:KNOWLEDGE},...updated.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.text}))]})
+      const r=await fetch("/api/chat",{
+        method:"POST",headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({messages:[{role:"system",content:KNOWLEDGE},...updated.map(m=>({role:m.role==="assistant"?"assistant":"user",content:m.text}))]})
       });
       const d=await r.json();
       setMsgs(p=>[...p,{role:"assistant",text:d.choices?.[0]?.message?.content||"Unable to respond. Please try again or contact support@banyansoftware.com."}]);
