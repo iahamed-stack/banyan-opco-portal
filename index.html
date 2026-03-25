@@ -140,7 +140,7 @@ const MODELS=["All","SaaS","Cloud","On-Premise","Mixed"];
 const vColors={"Healthcare":"#b91c1c","EdTech":"#1d4ed8","Financial Services":"#7c3aed","Government":"#0f766e","Transportation":"#b45309","MIU":"#6b7280","Media":"#be185d","ANZ":"#0369a1","DACH":"#4d7c0f","UK/EU":"#1e40af","Brazil":"#15803d","Sports":"#92400e"};
 
 const sections={
-  onboarding:{label:"New OpCo Checklist",icon:"✅",accent:"#1a7a4a",bg:"#e6f5ee",desc:"Step-by-step guide for operating companies joining the Banyan portfolio.",contact:"support@banyansoftware.com",
+  onboarding:{label:"New OpCo Checklist",icon:"✅",accent:"#1a7a4a",bg:"#e6f5ee",desc:"Step-by-step guide for operating companies joining the Banyan portfolio. Links and resources will be added after security review.",contact:"support@banyansoftware.com",
     steps:[
       {n:"1",title:"Set Up Security Scanning",desc:"Get onboarded to Coalition Control for external security scanning of your domains and IPs. Contact security@banyansoftware.com to initiate.",badge:"Required"},
       {n:"2",title:"Complete Source Code Escrow",desc:"Enrol with Praxis Escrow Technologies — Banyan's preferred post-close escrow provider. DocuSign is sent post-close. Ensure your authorised person signs promptly.",badge:"Required"},
@@ -159,12 +159,12 @@ const sections={
       {title:"Scanning & Insurance",items:[
         {title:"External Security Scanning",desc:"Coalition Control provides black-box external scanning of OpCo domains and IPs — non-invasive, simulates real attacker methods.",url:"#soon"},
         {title:"Cybersecurity Insurance Guide",desc:"Coverage options, requirements, and how to obtain cybersecurity insurance.",url:"#soon"},
-        {title:"Contingent Vulnerabilities Policy",desc:"Contingent findings must be remediated within 90 days post-close or insurance may be cancelled.",url:"https://docs.google.com/document/d/1g_LoiGb8Lp2zGXl6Ead-FnXxmM8TNV6-objm1Ag60Bk/edit"},
-        {title:"Security Support",desc:"Submit all security inquiries to securitysupport@coalitioninc.com. Banyan email addresses receive priority queue status.",url:"mailto:securitysupport@coalitioninc.com"},
+        {title:"Contingent Vulnerabilities Policy",desc:"Contingent findings must be remediated within 90 days post-close or insurance may be cancelled.",url:"#soon"},
+        {title:"Security Support",desc:"Submit all security inquiries to securitysupport@coalitioninc.com. Banyan email addresses receive priority queue status.",url:"#soon"},
       ]},
       {title:"Compliance & Access",items:[
-        {title:"Acceptable Use Policy",desc:"Guidelines for appropriate use of Banyan IT resources.",url:"https://docs.google.com/document/d/1-5JR2cgZU1w6UQbS5dTi2NGHJTKBl4rf_i912DWmWYk/edit"},
-        {title:"Contractor Access Policy",desc:"MFA mandatory, activity monitoring, quarterly access reviews, and offboarding process.",url:"https://docs.google.com/document/d/1os4TI052jrSM5g2z4Txs2cYpTs3qrPGLEpOcr0RAOhs/edit"},
+        {title:"Acceptable Use Policy",desc:"Guidelines for appropriate use of Banyan IT resources.",url:"#soon"},
+        {title:"Contractor Access Policy",desc:"MFA mandatory, activity monitoring, quarterly access reviews, and offboarding process.",url:"#soon"},
         {title:"IT Bulletins & Alerts",desc:"IT announcements covering VPN maintenance, EDR alerts, and system updates.",url:"#soon"},
       ]},
     ]
@@ -172,11 +172,11 @@ const sections={
   policies:{label:"Policies",icon:"📋",accent:"#534AB7",bg:"#EEEDFE",desc:"Core policy documents and editable templates for operating companies to adopt and roll out.",contact:"support@banyansoftware.com",
     groups:[
       {title:"Core Policies",items:[
-        {title:"Acceptable Use Policy",desc:"Standards for IT resource usage — prohibited activities, monitoring, and enforcement.",url:"https://docs.google.com/document/d/1-5JR2cgZU1w6UQbS5dTi2NGHJTKBl4rf_i912DWmWYk/edit"},
-        {title:"Software Procurement Policy",desc:"Vendor evaluation, risk management, licensing requirements, and compliance.",url:"https://docs.google.com/document/d/1tn7SyGwf3q8mVHn3nBEyn7vAt8zbE1Ef5K3g-NyRrGs/edit"},
-        {title:"Contractor Access Policy",desc:"Least-privilege access governance for contractors and temporary workers.",url:"https://docs.google.com/document/d/1os4TI052jrSM5g2z4Txs2cYpTs3qrPGLEpOcr0RAOhs/edit"},
+        {title:"Acceptable Use Policy",desc:"Standards for IT resource usage — prohibited activities, monitoring, and enforcement.",url:"#soon"},
+        {title:"Software Procurement Policy",desc:"Vendor evaluation, risk management, licensing requirements, and compliance.",url:"#soon"},
+        {title:"Contractor Access Policy",desc:"Least-privilege access governance for contractors and temporary workers.",url:"#soon"},
         {title:"Generative AI Tools Policy",desc:"Responsible use of AI tools — data handling, acceptable use cases, prohibited activities.",url:"#soon"},
-        {title:"Meeting Etiquette & Calendar Hygiene",desc:"Standards for meeting invitations, punctuality, and client-facing professionalism.",url:"https://docs.google.com/document/d/1Iegi3rnwGR4xFhxagWQhAcyoCWsOufyqjeq55FvNax8/edit"},
+        {title:"Meeting Etiquette & Calendar Hygiene",desc:"Standards for meeting invitations, punctuality, and client-facing professionalism.",url:"#soon"},
       ]},
       {title:"Policy Templates",items:[
         {title:"Incident Response Policy Template",desc:"Editable template to define incident response and escalation paths.",url:"#soon"},
@@ -207,15 +207,15 @@ const sections={
   aitech:{label:"AI & Technology",icon:"⚡",accent:"#185FA5",bg:"#E6F1FB",desc:"AI tools, learning resources, coding curriculum, and technology guidance for operating company technical teams.",contact:"support@banyansoftware.com",
     groups:[
       {title:"AI Tools & Access",items:[
-        {title:"Banyan AI Workshop Portal",desc:"Register at portal.ai.banyansoftware.net. Leaders configure a Tech Leader under My Teams to enrol teams.",url:"https://portal.ai.banyansoftware.net",badge:"Live"},
-        {title:"Zeus — Internal AI Document Q&A",desc:"Banyan's internal AI — Google Drive integrated Q&A, TDD report generation, security scanning.",url:"https://docs.google.com/document/d/1E6UlvF86W6iza2kr6EaIGT4hY0MRwmlCGtj5-MVBf0o/edit"},
-        {title:"Okta SSO — Tool Access",desc:"All Banyan tools accessible via Okta SSO. Contact support@banyansoftware.com.",url:"http://banyansoftware.okta.com/"},
-        {title:"Claude.ai for Teams",desc:"Used across the portfolio for documentation, code review, and AI-assisted workflows.",url:"https://claude.ai"},
+        {title:"Banyan AI Workshop Portal",desc:"Register your operating company to enrol teams in the AI Agentic Coding Workshop.",url:"#soon",badge:"Live"},
+        {title:"Zeus — Internal AI Document Q&A",desc:"Banyan's internal AI — Google Drive integrated Q&A, TDD report generation, security scanning.",url:"#soon"},
+        {title:"Okta SSO — Tool Access",desc:"All Banyan tools accessible via Okta SSO. Contact support@banyansoftware.com.",url:"#soon"},
+        {title:"Claude.ai for Teams",desc:"Used across the portfolio for documentation, code review, and AI-assisted workflows.",url:"#soon"},
       ]},
       {title:"Learning & Curriculum",items:[
-        {title:"AI Coding Curriculum",desc:"AI coding training for operating companies — agentic coding, Claude, GitHub Copilot.",url:"https://docs.google.com/presentation/d/1Eevr6Nn0kd234bct1Y5h2tAprtC2flkCDvTPeJ-0h14/edit"},
-        {title:"Technical Group Onboarding",desc:"Standard onboarding materials for companies joining the Banyan Technical Group.",url:"https://docs.google.com/presentation/d/118_bcN3jcH5AcYXZU2P1rbtbgkD-fAYI/edit"},
-        {title:"AI Showcase Recording — March 2026",desc:"Portfolio showcase: AI-powered PO workflow automation and agentic SDLC automation.",url:"https://drive.google.com/file/d/1csQ1nF7BL5QeSKKCyOcJMP8o8nl6MI3c/view"},
+        {title:"AI Coding Curriculum",desc:"AI coding training for operating companies — agentic coding, Claude, GitHub Copilot.",url:"#soon"},
+        {title:"Technical Group Onboarding",desc:"Standard onboarding materials for companies joining the Banyan Technical Group.",url:"#soon"},
+        {title:"AI Showcase Recording — March 2026",desc:"Portfolio showcase: AI-powered PO workflow automation and agentic SDLC automation.",url:"#soon"},
         {title:"AI Security Guardrails Guide",desc:"Protecting AI agents from prompt injection — system prompt templates and CLAUDE.md guidance.",url:"#soon"},
       ]},
       {title:"Portfolio Use Cases",items:[
@@ -251,7 +251,7 @@ const sections={
       ]},
       {title:"Resources & Templates",items:[
         {title:"Ecosystem Synergy Template",desc:"Template for mapping and activating synergies across Banyan operating companies.",url:"#soon"},
-        {title:"Roadmap Planning Workshop",desc:"Strategic roadmap planning materials for operating company leadership teams.",url:"https://docs.google.com/presentation/d/1j77OAsVk28ppSVzplV7xOwL4FSPeWGO8/edit"},
+        {title:"Roadmap Planning Workshop",desc:"Strategic roadmap planning materials for operating company leadership teams.",url:"#soon"},
         {title:"Technical Advisor Directory",desc:"Directory of Banyan technical advisors, security leads, and operating partners.",url:"#soon"},
         {title:"How to Request Advisory Support",desc:"Process for engaging technical advisory services for your operating company.",url:"#soon"},
       ]},
@@ -260,9 +260,9 @@ const sections={
   workshops:{label:"Workshops",icon:"🎓",accent:"#5F5E5A",bg:"#F1EFE8",desc:"Workshop recordings, reference materials, and registration links for Banyan learning and enablement programs.",contact:"support@banyansoftware.com",
     groups:[
       {title:"Available Now",items:[
-        {title:"AI Agentic Coding Workshop",desc:"Live cohort-based workshop. Register at portal.ai.banyansoftware.net. Multiple session dates available.",url:"https://portal.ai.banyansoftware.net",badge:"Enrolling now"},
-        {title:"AI Showcase — March 2026 Recording",desc:"AI-powered PO workflow automation (Jira) and agentic SDLC automation.",url:"https://drive.google.com/file/d/1csQ1nF7BL5QeSKKCyOcJMP8o8nl6MI3c/view"},
-        {title:"Roadmap Planning Workshop",desc:"Strategic roadmap planning workshop materials for operating company leadership teams.",url:"https://docs.google.com/presentation/d/1j77OAsVk28ppSVzplV7xOwL4FSPeWGO8/edit"},
+        {title:"AI Agentic Coding Workshop",desc:"Live cohort-based workshop. Multiple session dates available.",url:"#soon",badge:"Enrolling now"},
+        {title:"AI Showcase — March 2026 Recording",desc:"Portfolio showcase: AI-powered PO workflow automation and agentic SDLC automation.",url:"#soon"},
+        {title:"Roadmap Planning Workshop",desc:"Strategic roadmap planning workshop materials for operating company leadership teams.",url:"#soon"},
         {title:"AI Tools Training Session Recording",desc:"AI tool capabilities, prompt engineering, custom configurations, and research workflows.",url:"#soon"},
       ]},
       {title:"Coming Soon",items:[
