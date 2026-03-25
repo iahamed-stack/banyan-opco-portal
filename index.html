@@ -315,13 +315,13 @@ function Portal(){
   const [fModel,setFModel]=React.useState("All");
   const [checked,setChecked]=React.useState({});
   const [aiError,setAiError]=React.useState(false);
+  // Using secure backend proxy - no client key needed
   const chatRef=React.useRef();
 
   React.useEffect(()=>{if(chatRef.current)chatRef.current.scrollTop=chatRef.current.scrollHeight;},[msgs]);
 
   const send=async(msg)=>{
     const t=(msg||inp).trim();if(!t)return;
-    if(!API_KEY){setAiError(true);return;}
     setInp("");setAiError(false);
     const updated=[...msgs,{role:"user",text:t}];
     setMsgs(updated);setLoading(true);
@@ -570,11 +570,7 @@ function Portal(){
           <h2 style={{fontSize:22,fontWeight:700,color:"#1a1a1a",margin:"0 0 4px"}}>Resource Assistant</h2>
           <div style={{fontSize:13,color:"#888",marginBottom:20}}>Ask about tools, discounts, policies, guilds, onboarding, workshops, or security</div>
 
-          {aiError&&(
-            <div style={{background:"#fff3cd",border:"1px solid #ffc107",borderRadius:8,padding:"12px 16px",marginBottom:14,fontSize:13,color:"#856404",lineHeight:1.7}}>
-              ⚠️ API key not configured. Open <code>index.html</code> in a text editor, find the line <code>const API_KEY = "";</code> near the top, and add your Anthropic API key from <a href="https://console.anthropic.com/settings/keys" target="_blank" style={{color:"#856404"}}>console.anthropic.com</a>.
-            </div>
-          )}
+
 
           <div ref={chatRef} style={{background:"#fff",border:"1px solid #e8e8e8",borderRadius:10,padding:"18px",minHeight:300,maxHeight:420,overflowY:"auto",marginBottom:10,display:"flex",flexDirection:"column",gap:14}}>
             {msgs.map((m,i)=>(
