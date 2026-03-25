@@ -309,7 +309,7 @@ function Portal(){
   const [fVertical,setFVertical]=React.useState("All Verticals");
   const [fModel,setFModel]=React.useState("All");
   const [checked,setChecked]=React.useState({});
-  const [aiError]=React.useState(false);
+  const [aiError,setAiError]=React.useState(false);
   const chatRef=React.useRef();
 
   React.useEffect(()=>{if(chatRef.current)chatRef.current.scrollTop=chatRef.current.scrollHeight;},[msgs]);
